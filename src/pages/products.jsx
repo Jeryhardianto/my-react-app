@@ -120,11 +120,11 @@ useEffect(() => {
                 const product = products.find((product) => product.id === item.id)
                 return (
                   <tr key={product.id}>
-                    <td>{product.title}</td>
-                    <td>Rp.{" "}{product.price.toLocaleString('id-ID')}</td>
+                    <td>{product.title.substring(0, 20)}...</td>
+                    <td>${" "}{product.price.toLocaleString('id-ID')}</td>
                     <td>{item.qty}</td>
                     <td>
-                    Rp.{" "}{
+                    ${" "}{
                     (product.price * item.qty).toLocaleString('id-ID')}
                     </td>
                   </tr>
@@ -133,7 +133,7 @@ useEffect(() => {
             <tr ref={totalPriceRef}>
               <td colSpan={3}><b>Total Price</b></td>
               <td>
-             <b> Rp.{" "}{totalPrice.toLocaleString('id-ID')}</b>
+             <b> ${" "}{totalPrice.toLocaleString('id-ID')}</b>
               </td>
             </tr>
           </tbody>
