@@ -1,41 +1,55 @@
+
 import InputForm from "../Elements/Input";
 import Button from "../Elements/Button";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { login } from "../../services/auth.service.js";
 
 const FormLogin = () => {
+  const [loginFailed, setLoginFailed] = useState("")
   const handleLogin = (e) => {
     e.preventDefault()
-    let email = e.target.email.value
-    let password = e.target.password.value
+    // localStorage.setItem('username', username)
+    // localStorage.setItem('password', password)
 
-    localStorage.setItem('email', email)
-    localStorage.setItem('password', password)
-
-    window.location.href = '/products'
+    // window.location.href = '/products'
+    const data = {
+      username: e.target.username.value,
+      password: e.target.password.value
+    }
+    login(data, (status, res) => {
+      if(status){
+        localStorage.setItem('token', res)
+        window.location.href = '/products'
+      }else{
+        setLoginFailed(res.response.data)
+      }
+    })
 
   }
 
-  const emailRef = useRef(null)
+  const usernameRef = useRef(null)
 
   useEffect(() => {
-    emailRef.current.focus()
+    usernameRef.current.focus()
   }, [])
  return (
    <form onSubmit={handleLogin}>
+       
        <InputForm 
-          label="Email" 
-          name="email" 
-          type="email" 
-          placeholder="example@ex.com"
-          ref={emailRef}
+          label="Username" 
+          name="username" 
+          type="text" 
+          placeholder="John Doe"
+          ref={usernameRef}
        />
-       <InputForm 
+       <InputForm   
           label="Password" 
           name="password" 
           type="password" 
           placeholder="******"
        />
        <Button classname="bg-blue-500 w-full" type="submit">Login</Button>
+       {loginFailed && <p className="text-red-500 text-center mt-5">{loginFailed}</p>}
      </form> 
  )
 }
